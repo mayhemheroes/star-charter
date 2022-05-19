@@ -1,0 +1,19 @@
+FROM ubuntu:20.04
+
+# Install required libraries
+RUN apt-get update
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y wget gzip git libgsl-dev libcairo2-dev build-essential
+
+# Install ephemeris software
+WORKDIR /
+RUN git clone https://github.com/dcf21/ephemeris-compute-de430.git
+WORKDIR /ephemeris-compute-de430
+RUN /ephemeris-compute-de430/setup.sh
+
+# Copy code into container
+WORKDIR /
+ADD . star-charter
+
+# Fetch data
+WORKDIR /star-charter
+RUN /star-charter/setup.sh 2>&1 | tee installation.log
