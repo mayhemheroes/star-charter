@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:20.04 as builder
 
 # Install required libraries
 RUN apt-get update
@@ -17,3 +17,12 @@ ADD . star-charter
 # Fetch data
 WORKDIR /star-charter
 RUN /star-charter/setup.sh 2>&1 | tee installation.log
+
+RUN mkdir -p /deps
+RUN ldd /star-charter/bin/starchart.bin | tr -s '[:blank:]' '\n' | grep '^/' | xargs -I % sh -c 'cp % /deps;'
+
+FROM ubuntu:20.04 as package
+
+COPY --from=builder /deps /deps
+COPY --from=builder /star-charter/bin/starchart.bin /star-charter/bin/starchart.bin
+ENV LD_LIBRARY_PATH=/deps
