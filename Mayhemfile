@@ -2,4 +2,4 @@ project: star-charter
 target: starchart
 
 cmds:
-  - cmd: /star-charter/bin/starchart.bin @@
+  - cmd: /starchart.bin @@
