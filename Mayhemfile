@@ -1,5 +1,7 @@
 project: star-charter
 target: starchart
+testsuite:
+  - file://examples/orion.sch
 
 cmds:
   - cmd: /starchart.bin @@
